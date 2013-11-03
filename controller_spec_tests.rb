@@ -45,6 +45,7 @@ describe TopicsController do
           post :create, topic: {title: "Meat", content: "It is what is for food"}
           }.to change { Topic.count }.by(1)
         expect(Topic.last.content).to eq('It is what is for food')
+        expect(response).to redirect_to(root_path)
       end
     end
     context 'when using invalid params' do
@@ -52,6 +53,7 @@ describe TopicsController do
         expect {
         post :create, topic: {title: "Wrong"}
         }.to_not change { Topic.count }
+        expect(response).to render_template(:new)
       end
     end
     it "creates a topic with a user" do
@@ -90,6 +92,7 @@ describe TopicsController do
     it "updates topic" do
       put :update, id: @topic.id, topic: {title: "NOT HELLO", content: "THIS IS CONTENT"}
       expect(Topic.find(@topic.id).title).to eq("NOT HELLO")
+      expect(response).to redirect_to(topics_path)
     end
   end
 
