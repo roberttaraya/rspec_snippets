@@ -16,14 +16,6 @@ feature 'User can sign in and sign out' do
     expect(current_path).to eq(root_path)
   end
 
-  it "user fills in invalid username and password" do
-    visit new_session_path
-    fill_in('session[username]', :with => 'wrong')
-    fill_in('session[password]', :with => 'wrong')
-    click_button('Sign In')
-    expect(current_path).to eq(new_session_path)
-  end
-
   it "user can log out" do
     visit new_session_path
     fill_in('session[username]', :with => user_attrs[:username])
@@ -213,3 +205,23 @@ feature 'Guest' do
     end
   end
 end
+
+====================
+
+feature "New Comments" do
+  before(:each) do
+    @submission = Submission.create(url: "http://penguin.com", title: "A Resource")
+    @comment = Comment.create(content: "all about penguins", submission_id: 1)
+    visit root_path
+    click_on "Add a Comment"
+  end
+
+  scenario "can be added to home page" do
+    fill_in "comment_content", with: "i like penguins a lot, thanks"
+    click_button "Submit"
+    expect(page).to have_content("i like penguins a lot, thanks")
+  end
+end
+
+====================
+
